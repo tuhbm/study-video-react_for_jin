@@ -65,23 +65,15 @@
       )
     }
 
-    function Favorites() {
+    function Favorites({ favoriteList }) {
       return (
         <ul className="favorites">
-          <CatItem img="https://cataas.com//cat/5e9970351b7a400011744233/says/inflearn" />
-          <CatItem img="https://cataas.com/cat/595f280b557291a9750ebf65/says/JavaScript" />
+          {favoriteList.map(cat => <CatItem img={cat} key={cat} />)}
         </ul>
       );
     }
 
-    const MainCard = ({ img, text }) => {
-      function handleHeartClick() {
-        console.log('하트 눌름');
-      }
-
-      function handleHeartMouseOver() {
-        console.log('하트 마우스 over');
-      }
+    const MainCard = ({ img, text, handleHeartClick }) => {
 
       return (
         <div className="main-card">
@@ -92,7 +84,6 @@
           />
           <button
             onClick={handleHeartClick}
-            onMouseOver={handleHeartMouseOver}
           >
             🤍
           </button>
@@ -104,7 +95,12 @@
       // const countState = React.useState(1);
       // const counter = countState[0];
       // const setCounter = countState[1];
+      const CAT1 = "https://cataas.com/cat/60b73094e04e18001194a309/says/react";
+      const CAT2 = "https://cataas.com//cat/5e9970351b7a400011744233/says/inflearn";
+      const CAT3 = "https://cataas.com/cat/595f280b557291a9750ebf65/says/JavaScript";
       const [counter, setCounter] = React.useState(1);
+      const [mainCat, setMainCat] = React.useState(CAT1);
+      const [favoriteList, setFavoriteList] = React.useState([CAT1, CAT2])
 
       console.log('counter:::', counter);
 
@@ -112,6 +108,12 @@
         event.preventDefault();
         console.log('폼 전송!!!');
         setCounter(counter + 1);
+        setMainCat(CAT2)
+      }
+
+      function handleHeartClick() {
+        console.log('하트 click');
+        setFavoriteList([...favoriteList, CAT3])
       }
 
       return (
@@ -119,10 +121,13 @@
           <Title>{counter}번째 고양이 가라사대</Title>
           <Form handleFormSubmit={handleFormSubmit} />
           <MainCard
-            img="https://cataas.com/cat/60b73094e04e18001194a309/says/react"
+            handleHeartClick={handleHeartClick}
+            img={mainCat}
             text="고양이"
           />
-          <Favorites />
+          <Favorites
+            favoriteList={favoriteList}
+          />
         </div>
       );
     }
